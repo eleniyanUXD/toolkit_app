@@ -1,16 +1,38 @@
-# toolkit_app
+# 🧰 Toolkit App
 
-A new Flutter project.
+A Flutter multi-tool application built for learning and productivity.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## ✨ Features
 
-A few resources to get you started if this is your first Flutter project:
+- 📏 Unit Converter  
+- 💱 USD to NGN Exchange Rate Checker  
+- 📝 Notes App  
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🛠 Tech Stack
+
+- Flutter  
+- Dart  
+
+---
+
+## 📱 About This Project
+
+This app was built to practice Flutter UI design, state management, and simple data handling.
+
+It demonstrates:
+- Clean UI design
+- Navigation between screens
+- Basic logic separation
+
+---
+
+## 🚀 Getting Started
+
+Clone the repo:
+
+```bash
+git clone https://github.com/eleniyanUXD/toolkit_app.git
