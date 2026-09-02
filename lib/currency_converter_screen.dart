@@ -80,7 +80,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
 
               // FROM dropdown
               DropdownButtonFormField<String>(

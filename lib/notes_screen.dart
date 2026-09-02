@@ -16,30 +16,45 @@ class _NotesScreenState extends State<NotesScreen> {
 
   List<String> notes = [];
 
+  // Edit note index
+  int? editingIndex;
+
   @override
   void initState() {
     super.initState();
-    loadNotes(); 
+    loadNotes();
   }
 
-  /// Load saved notes
+  // Load saved notes
   void loadNotes() async {
     notes = await service.loadNotes();
     setState(() {});
   }
 
-  /// Add new note
+  // Add or update note
   void addNote() async {
     if (controller.text.trim().isEmpty) return;
 
-    notes.add(controller.text.trim());
+    if (editingIndex != null) {
+      notes[editingIndex!] = controller.text.trim();
+      editingIndex = null;
+    } else {
+      notes.add(controller.text.trim());
+    }
     controller.clear();
 
-    await service.saveNotes(notes); 
+    await service.saveNotes(notes);
     setState(() {});
   }
 
-  /// Delete note (bonus feature 🔥)
+  void editNote(int index) {
+    setState(() {
+      controller.text = notes[index];
+      editingIndex = index;
+    });
+  }
+
+  // Delete note
   void deleteNote(int index) async {
     notes.removeAt(index);
     await service.saveNotes(notes);
@@ -104,10 +119,7 @@ class _NotesScreenState extends State<NotesScreen> {
                 ),
                 child: const Text(
                   'Add Note',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -132,9 +144,27 @@ class _NotesScreenState extends State<NotesScreen> {
                           ),
                           child: ListTile(
                             title: Text(notes[index]),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () => deleteNote(index),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Edit button icon
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    color: Colors.blue,
+                                  ),
+                                  onPressed: () => editNote(index),
+                                ),
+
+                                // Delete button icon
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () => deleteNote(index),
+                                ),
+                              ],
                             ),
                           ),
                         );
