@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:toolkit_app/currency_converter_screen.dart';
-import 'package:toolkit_app/unit_converter_screen.dart';
-import 'package:toolkit_app/notes_screen.dart';
+import 'package:toolkit_app/screens/currency_converter_screen.dart';
+import 'package:toolkit_app/screens/unit_converter_screen.dart';
+import 'package:toolkit_app/screens/notes_screen.dart';
 import 'package:toolkit_app/widgets/quick_action_card.dart';
 import 'package:toolkit_app/widgets/popular_tool_card.dart';
 import 'package:toolkit_app/widgets/recent_activity.dart';
@@ -129,7 +129,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const CurrencyConverterScreen(),
+                          ),
+                        );
+                      },
                       child: QuickActionCard(
                         title: 'Currency Converter',
                         subtitle: 'Convert currencies easily',
@@ -140,7 +148,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(width: 16),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const UnitConverterScreen(),
+                          ),
+                        );
+                      },
                       child: QuickActionCard(
                         title: 'Unit Converter',
                         subtitle: 'Convert units quickly',

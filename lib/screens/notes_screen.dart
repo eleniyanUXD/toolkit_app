@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'notes_service.dart';
+import '../services/notes_service.dart';
 
 class NotesScreen extends StatefulWidget {
   const NotesScreen({super.key});

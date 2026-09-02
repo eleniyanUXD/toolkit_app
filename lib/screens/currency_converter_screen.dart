@@ -1,33 +1,40 @@
 import 'package:flutter/material.dart';
-import 'currencyconverter_logic.dart';
+import '../services/currency_service.dart';
 
-class CurrencyScreen extends StatefulWidget {
-  const CurrencyScreen({super.key});
+class CurrencyConverterScreen extends StatefulWidget {
+  const CurrencyConverterScreen({super.key});
 
   @override
-  State<CurrencyScreen> createState() => _CurrencyScreenState();
+  State<CurrencyConverterScreen> createState() => _CurrencyConverterScreenState();
 }
 
-class _CurrencyScreenState extends State<CurrencyScreen> {
+class _CurrencyConverterScreenState extends State<CurrencyConverterScreen> {
   final controller = TextEditingController();
 
   String from = 'NGN';
   String to = 'USD';
   double convertedAmount = 0;
 
-  void convert() {
+  Future<void> convert() async {
     final amount = double.tryParse(controller.text) ?? 0;
 
-    if (from == to) {
-      setState(() {
-        convertedAmount = amount;
-      });
+    if (amount <= 0) {
       return;
     }
 
-    setState(() {
-      convertedAmount = convertCurrency(amount, from, to);
-    });
+    try {
+      final result = await CurrencyService().convertCurrency(amount, from, to);
+
+      setState(() {
+        convertedAmount = result;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Unable to get exchange rate. Please try again.'),
+        ),
+      );
+    }
   }
 
   @override
