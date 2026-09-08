@@ -32,10 +32,44 @@ class CustomNavBar extends StatelessWidget {
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: List.generate(items.length, (index) {
             final item = items[index];
             final isSelected = currentIndex == index;
 
+            // AI is the center button
+            if (index == 2) {
+              return GestureDetector(
+                onTap: () => onTap(index),
+                child: Transform.translate(
+                  offset: const Offset(0, -18),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isSelected ? Colors.blue : Colors.blue,
+                      border: Border.all(color: Colors.white, width: 4),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.15),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      isSelected ? item.activeIcon : item.icon,
+                      size: 27,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              );
+            }
+
+            // Normal navigation items
             return GestureDetector(
               onTap: () => onTap(index),
               behavior: HitTestBehavior.opaque,

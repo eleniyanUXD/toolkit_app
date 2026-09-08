@@ -5,6 +5,7 @@ import '../widgets/custom_nav_bar.dart';
 
 import '../screens/home_screen.dart';
 import '../screens/tools_screen.dart';
+import '../screens/ai_assistant_screen.dart';
 import '../screens/history_screen.dart';
 import '../screens/profile_screen.dart';
 
@@ -21,6 +22,7 @@ class _MainNavigationState extends State<MainNavigation> {
   final List<Widget> _screens = const [
     HomeScreen(),
     ToolsScreen(),
+    AiAssistantScreen(),
     HistoryScreen(),
     ProfileScreen(),
   ];
@@ -37,6 +39,11 @@ class _MainNavigationState extends State<MainNavigation> {
       label: 'Tools',
     ),
     NavItemModel(
+      icon: Icons.auto_awesome_outlined,
+      activeIcon: Icons.auto_awesome,
+      label: 'AI',
+    ),
+    NavItemModel(
       icon: Icons.history_outlined,
       activeIcon: Icons.history,
       label: 'History',
@@ -51,7 +58,10 @@ class _MainNavigationState extends State<MainNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(index: _currentIndex, children: _screens),
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _screens,
+      ),
 
       bottomNavigationBar: CustomNavBar(
         currentIndex: _currentIndex,

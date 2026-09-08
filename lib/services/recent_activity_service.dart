@@ -20,16 +20,12 @@ class RecentActivityService {
       'timestamp': DateTime.now().toIso8601String(),
     });
 
-    activities.removeWhere((item) {
-      final data = jsonDecode(item);
-      return data['title'] == title;
-    });
-
+    // Add newest activity at the top
     activities.insert(0, activity);
 
-    // Keep only the latest 5
-    if (activities.length > 5) {
-      activities.removeRange(5, activities.length);
+    // Keep only the latest 7 activities
+    if (activities.length > 7) {
+      activities.removeRange(7, activities.length);
     }
 
     await prefs.setStringList(_key, activities);

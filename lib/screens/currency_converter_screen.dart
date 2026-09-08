@@ -1,38 +1,41 @@
 import 'package:flutter/material.dart';
 import '../services/currency_service.dart';
+import '../services/recent_activity_service.dart';
 
 class CurrencyConverterScreen extends StatefulWidget {
   const CurrencyConverterScreen({super.key});
 
   @override
-  State<CurrencyConverterScreen> createState() => _CurrencyConverterScreenState();
+  State<CurrencyConverterScreen> createState() =>
+      _CurrencyConverterScreenState();
 }
 
 class _CurrencyConverterScreenState extends State<CurrencyConverterScreen> {
   final controller = TextEditingController();
+  final CurrencyService currencyService = CurrencyService();
 
   String from = 'NGN';
   String to = 'USD';
   double convertedAmount = 0;
 
-  Future<void> convert() async {
-    final amount = double.tryParse(controller.text) ?? 0;
-
-    if (amount <= 0) {
-      return;
-    }
-
+  Future<void> convertCurrency() async {
     try {
-      final result = await CurrencyService().convertCurrency(amount, from, to);
+      final amount = double.parse(controller.text);
+
+      final result = await currencyService.convertCurrency(amount, from, to);
 
       setState(() {
         convertedAmount = result;
       });
+
+      await RecentActivityService.addActivity(
+        title: 'Currency Converter',
+        subtitle: '$amount $from → ${result.toStringAsFixed(2)} $to',
+        icon: 'currency_exchange',
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Unable to get exchange rate. Please try again.'),
-        ),
+        const SnackBar(content: Text('Please enter a valid amount')),
       );
     }
   }
@@ -155,7 +158,7 @@ class _CurrencyConverterScreenState extends State<CurrencyConverterScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: convert,
+                  onPressed: convertCurrency,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,

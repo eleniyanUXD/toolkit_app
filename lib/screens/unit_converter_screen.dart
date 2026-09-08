@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/unit_service.dart';
+import '../services/recent_activity_service.dart';
 
 class UnitConverterScreen extends StatefulWidget {
   const UnitConverterScreen({super.key});
@@ -62,17 +63,45 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
     'Data',
   ];
 
-  void convert() {
-    final input = double.tryParse(controller.text) ?? 0;
+  Future<void> convert() async {
+    final input = double.tryParse(controller.text);
+
+    if (input == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid value')),
+      );
+      return;
+    }
+
+    final convertedResult = unitService.convert(
+      value: input,
+      category: selectedCategory,
+      from: from,
+      to: to,
+    );
 
     setState(() {
-      result = unitService.convert(
-        value: input,
-        category: selectedCategory,
-        from: from,
-        to: to,
-      );
+      result = convertedResult;
     });
+
+    await RecentActivityService.addActivity(
+      title: 'Unit Converter',
+      subtitle: '$input $from → ${convertedResult.toStringAsFixed(2)} $to',
+      icon: _getActivityIcon(),
+    );
+  }
+
+  String _getActivityIcon() {
+    switch (selectedCategory) {
+      case 'Length':
+        return 'length';
+      case 'Weight':
+        return 'weight';
+      case 'Temperature':
+        return 'temperature';
+      default:
+        return 'calculate';
+    }
   }
 
   void changeCategory(String category) {

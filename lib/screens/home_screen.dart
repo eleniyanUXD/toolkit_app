@@ -129,14 +129,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
                                 const CurrencyConverterScreen(),
                           ),
                         );
+
+                        // Refresh HomeScreen after returning
+                        setState(() {});
                       },
                       child: QuickActionCard(
                         title: 'Currency Converter',
@@ -145,16 +148,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
+
                   const SizedBox(width: 16),
+
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const UnitConverterScreen(),
                           ),
                         );
+
+                        // Refresh HomeScreen after returning
+                        setState(() {});
                       },
                       child: QuickActionCard(
                         title: 'Unit Converter',
@@ -164,34 +172,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ],
-              ),
-
-              const SizedBox(height: 16),
-
-              const Text(
-                'Popular tools',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 12),
-              PopularToolCard(
-                title: 'Temperature',
-                prefixIcon: Icons.thermostat,
-                suffixIcon: Icons.arrow_forward_ios,
-                onTap: () {},
-              ),
-              const SizedBox(height: 12),
-              PopularToolCard(
-                title: 'Length Converter',
-                prefixIcon: Icons.straighten,
-                suffixIcon: Icons.arrow_forward_ios,
-                onTap: () {},
-              ),
-              const SizedBox(height: 12),
-              PopularToolCard(
-                title: 'Weight Converter',
-                prefixIcon: Icons.fitness_center,
-                suffixIcon: Icons.arrow_forward_ios,
-                onTap: () {},
               ),
 
               const SizedBox(height: 16),

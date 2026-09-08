@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import '../services/recent_activity_service.dart';
 
 class RecentActivities extends StatefulWidget {
-  const RecentActivities({super.key});
+  const RecentActivities({super.key, this.onSelect});
+
+  final VoidCallback? onSelect;
 
   @override
   State<RecentActivities> createState() => _RecentActivitiesState();
@@ -17,6 +19,12 @@ class _RecentActivitiesState extends State<RecentActivities> {
     _loadActivities();
   }
 
+  @override
+  void didUpdateWidget(covariant RecentActivities oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _loadActivities();
+  }
+
   Future<void> _loadActivities() async {
     final result = await RecentActivityService.getActivities();
 
@@ -27,32 +35,31 @@ class _RecentActivitiesState extends State<RecentActivities> {
     });
   }
 
+  // Public method that allows HomeScreen to refresh this widget.
+  Future<void> refreshActivities() async {
+    await _loadActivities();
+  }
+
   IconData _getIcon(String icon) {
     switch (icon) {
-      case 'currency':
+      case 'currency_exchange':
         return Icons.currency_exchange;
-
       case 'length':
         return Icons.straighten;
-
       case 'temperature':
         return Icons.thermostat;
-
       case 'weight':
         return Icons.scale;
-
       default:
         return Icons.calculate;
     }
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Section title
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -62,9 +69,7 @@ class _RecentActivitiesState extends State<RecentActivities> {
             ),
 
             TextButton(
-              onPressed: () {
-                // Navigate to history screen later
-              },
+              onPressed: () {},
               child: const Text(
                 'See all',
                 style: TextStyle(
@@ -79,7 +84,6 @@ class _RecentActivitiesState extends State<RecentActivities> {
 
         const SizedBox(height: 8),
 
-        // Show activities if available
         if (activities.isEmpty)
           Text(
             'No recent activities',
@@ -127,7 +131,6 @@ class _RecentActivityCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Icon
           Container(
             width: 45,
             height: 45,
@@ -140,7 +143,6 @@ class _RecentActivityCard extends StatelessWidget {
 
           const SizedBox(width: 12),
 
-          // Text
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
