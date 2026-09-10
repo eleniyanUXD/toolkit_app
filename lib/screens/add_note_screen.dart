@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import '../services/notes_service.dart';
+import '../services/recent_activity_service.dart';
 
-class NotesScreen extends StatefulWidget {
-  const NotesScreen({super.key});
+class AddNotesScreen extends StatefulWidget {
+  const AddNotesScreen({super.key});
 
   @override
-  State<NotesScreen> createState() {
-    return _NotesScreenState();
+  State<AddNotesScreen> createState() {
+    return _AddNotesScreenState();
   }
 }
 
-class _NotesScreenState extends State<NotesScreen> {
+class _AddNotesScreenState extends State<AddNotesScreen> {
   final controller = TextEditingController();
   final service = NotesService();
 
@@ -26,24 +27,40 @@ class _NotesScreenState extends State<NotesScreen> {
   }
 
   // Load saved notes
-  void loadNotes() async {
+  Future<void> loadNotes() async {
     notes = await service.loadNotes();
+
+    if (!mounted) return;
+
     setState(() {});
   }
 
   // Add or update note
-  void addNote() async {
-    if (controller.text.trim().isEmpty) return;
+  Future<void> addNote() async {
+    final noteText = controller.text.trim();
+
+    if (noteText.isEmpty) return;
 
     if (editingIndex != null) {
-      notes[editingIndex!] = controller.text.trim();
+      notes[editingIndex!] = noteText;
       editingIndex = null;
     } else {
-      notes.add(controller.text.trim());
+      notes.add(noteText);
+
+      // Add to recent activity
+      await RecentActivityService.addActivity(
+        title: 'Add Note',
+        subtitle: noteText,
+        icon: 'note',
+      );
     }
+
     controller.clear();
 
     await service.saveNotes(notes);
+
+    if (!mounted) return;
+
     setState(() {});
   }
 

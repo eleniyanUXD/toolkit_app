@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import '../services/recent_activity_service.dart';
 
 class RecentActivities extends StatefulWidget {
-  const RecentActivities({super.key, this.onSelect});
+  const RecentActivities({super.key, this.onSelect, this.refreshKey});
 
   final VoidCallback? onSelect;
+  final int? refreshKey;
 
   @override
   State<RecentActivities> createState() => _RecentActivitiesState();
@@ -22,7 +23,10 @@ class _RecentActivitiesState extends State<RecentActivities> {
   @override
   void didUpdateWidget(covariant RecentActivities oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _loadActivities();
+
+    if (oldWidget.refreshKey != widget.refreshKey) {
+      _loadActivities();
+    }
   }
 
   Future<void> _loadActivities() async {
@@ -50,6 +54,8 @@ class _RecentActivitiesState extends State<RecentActivities> {
         return Icons.thermostat;
       case 'weight':
         return Icons.scale;
+      case 'note':
+        return Icons.note;
       default:
         return Icons.calculate;
     }

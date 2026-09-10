@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit_app/screens/currency_converter_screen.dart';
 import 'package:toolkit_app/screens/unit_converter_screen.dart';
-import 'package:toolkit_app/screens/notes_screen.dart';
+import 'package:toolkit_app/screens/add_note_screen.dart';
 import 'package:toolkit_app/widgets/quick_action_card.dart';
 import 'package:toolkit_app/widgets/popular_tool_card.dart';
 import 'package:toolkit_app/widgets/recent_activity.dart';
@@ -15,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController _searchController = TextEditingController();
+  int recentActivityRefreshKey = 0;
 
   @override
   void initState() {
@@ -176,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 16),
 
-              const RecentActivities(),
+              RecentActivities(refreshKey: recentActivityRefreshKey),
             ],
           ),
         ),
