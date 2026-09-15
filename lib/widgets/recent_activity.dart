@@ -71,7 +71,7 @@ class _RecentActivitiesState extends State<RecentActivities> {
           children: [
             const Text(
               'Recent activities',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
             ),
 
             TextButton(
@@ -165,7 +165,7 @@ class _RecentActivityCard extends StatelessWidget {
 
                 Text(
                   subtitle,
-                  style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                 ),
               ],
             ),

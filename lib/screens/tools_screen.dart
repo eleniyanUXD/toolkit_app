@@ -75,7 +75,7 @@ class _ToolsScreenState extends State<ToolsScreen> {
               children: [
                 Text(
                   'All tools',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                 ),
                 SizedBox(height: 16),
                 GridView.builder(

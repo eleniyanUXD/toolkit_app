@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const Text(
                 'Quick actions',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 12),
               Row(
