@@ -14,13 +14,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   int recentActivityRefreshKey = 0;
 
   @override
   void initState() {
     super.initState();
-    _searchController = TextEditingController();
+    _searchController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -97,6 +99,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       size: 24,
                     ),
                   ),
+                  suffixIcon: _searchController.text.isNotEmpty
+                      ? IconButton(
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() {});
+                          },
+                          icon: const Icon(Icons.clear),
+                        )
+                      : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(
@@ -140,7 +151,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
 
                         // Refresh HomeScreen after returning
-                        setState(() {});
+                        setState(() {
+                          recentActivityRefreshKey++;
+                        });
                       },
                       child: QuickActionCard(
                         title: 'Currency Converter',
@@ -163,7 +176,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
 
                         // Refresh HomeScreen after returning
-                        setState(() {});
+                        setState(() {
+                          recentActivityRefreshKey++;
+                        });
                       },
                       child: QuickActionCard(
                         title: 'Unit Converter',
