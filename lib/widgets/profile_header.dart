@@ -31,7 +31,15 @@ class ProfileHeader extends StatelessWidget {
           style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
         ),
         const SizedBox(height: 6),
-        TextButton.icon(
+        ElevatedButton.icon(
+          style: ElevatedButton.styleFrom(
+            elevation: 0,
+            backgroundColor: const Color.fromARGB(255, 242, 248, 252),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          ),
           onPressed: onEdit,
           label: const Text(
             'Edit Profile',

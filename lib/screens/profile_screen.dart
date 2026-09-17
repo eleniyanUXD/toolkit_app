@@ -3,10 +3,16 @@ import '../models/profile_model.dart';
 import '../models/profile_menu_model.dart';
 import '../widgets/profile_header.dart';
 import '../widgets/profile_section.dart';
+import 'edit_profile_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final profile = ProfileModel(
@@ -78,8 +84,19 @@ class ProfileScreen extends StatelessWidget {
             Center(
               child: ProfileHeader(
                 profile: profile,
-                onEdit: () {
-                  // Edit profile screen will be added later.
+                onEdit: () async {
+                  final updatedProfile = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditProfileScreen(profile: profile),
+                    ),
+                  );
+
+                  if (updatedProfile != null &&
+                      updatedProfile is ProfileModel) {
+                    // Handle the updated profile data here.
+                    // For example, you can update the state or call a method to save the changes.
+                  }
                 },
               ),
             ),
