@@ -68,12 +68,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blue,
         elevation: 0,
         centerTitle: true,
         title: const Text(
           'Profile',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+            color: Colors.white,
+          ),
         ),
       ),
       body: SingleChildScrollView(
