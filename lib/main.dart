@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:toolkit_app/screens/onboarding_screen.dart';
 
 import 'navigation/main_navigation.dart';
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MainNavigation(),
+      home: OnboardingScreen(),
     );
   }
 }
