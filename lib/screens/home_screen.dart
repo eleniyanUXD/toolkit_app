@@ -5,6 +5,7 @@ import 'package:toolkit_app/screens/add_note_screen.dart';
 import 'package:toolkit_app/widgets/quick_action_card.dart';
 import 'package:toolkit_app/widgets/popular_tool_card.dart';
 import 'package:toolkit_app/widgets/recent_activity.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,6 +34,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Supabase.instance.client.auth.currentUser;
+
+    final userName =
+        user?.userMetadata?['name'] as String? ??
+        user?.email?.split('@').first ??
+        'there';
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -46,16 +54,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Welcome back!,',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
+                      Text(
+                        'Welcome back 👋,',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
                         ),
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        'Fuad',
+                      Text(
+                        userName,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,

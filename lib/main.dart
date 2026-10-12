@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:toolkit_app/screens/onboarding_screen.dart';
-
+import 'package:toolkit_app/screens/sign_up_screen.dart';
+import 'package:toolkit_app/screens/sign_in_screen.dart';
 import 'navigation/main_navigation.dart';
 
 Future<void> main() async {
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: OnboardingScreen(),
+      home: SignInScreen(),
     );
   }
 }
