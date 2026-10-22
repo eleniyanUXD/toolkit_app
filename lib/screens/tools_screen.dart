@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toolkit_app/navigation/main_navigation.dart';
 import 'package:toolkit_app/widgets/quick_action_card.dart';
 import 'package:toolkit_app/screens/currency_converter_screen.dart';
 import 'package:toolkit_app/screens/unit_converter_screen.dart';
@@ -6,6 +7,7 @@ import 'package:toolkit_app/screens/calculator_screen.dart';
 import 'package:toolkit_app/screens/add_note_screen.dart';
 import 'package:toolkit_app/screens/timer_screen.dart';
 import 'package:toolkit_app/screens/date_calculator_screen.dart';
+import 'home_screen.dart';
 
 class ToolsScreen extends StatefulWidget {
   const ToolsScreen({super.key});
@@ -55,7 +57,13 @@ class _ToolsScreenState extends State<ToolsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         centerTitle: true,
-
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const MainNavigation()),
+          ),
+        ),
         title: const Text(
           'Tools',
           style: TextStyle(

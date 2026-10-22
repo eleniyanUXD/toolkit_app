@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/onboarding_model.dart';
 import '../widgets/onboarding_page.dart';
+import 'sign_up_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'sign_in_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -50,12 +53,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      // We will navigate to the sign-in screen here later.
+      _finishOnboarding();
     }
   }
 
   void _skipOnboarding() {
-    // We will navigate to the sign-in screen here later.
+    _finishOnboarding();
+  }
+
+  Future<void> _finishOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('seenOnboarding', true);
+
+    if (!mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const SignupScreen()),
+    );
   }
 
   @override

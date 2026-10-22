@@ -3,6 +3,7 @@ import '../models/history_model.dart';
 import '../widgets/history_card.dart';
 import '../services/recent_activity_service.dart';
 import '../widgets/history_filter_chip.dart';
+import 'tools_screen.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -184,7 +185,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 borderRadius: BorderRadius.circular(16),
                               ),
                             ),
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const ToolsScreen(),
+                              ),
+                            ),
                             child: const Text(
                               'Explore tools',
                               style: TextStyle(

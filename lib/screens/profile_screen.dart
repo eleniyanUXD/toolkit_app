@@ -52,47 +52,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              child: const Text('Log Out', style: TextStyle(fontSize: 14)),
+              child: const Text('Log Out'),
             ),
           ],
         );
       },
     );
 
-    if (shouldLogout == true) {
-      try {
-        await Supabase.instance.client.auth.signOut();
+    if (shouldLogout != true) return;
 
-        if (!mounted) return;
+    try {
+      debugPrint('Starting Supabase logout...');
 
-        Navigator.of(
-          context,
-        ).pushNamedAndRemoveUntil('/signin', (route) => false);
-      } on AuthException catch (error) {
-        if (!mounted) return;
+      await Supabase.instance.client.auth.signOut();
 
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(error.message)));
-      } catch (error) {
-        if (!mounted) return;
+      debugPrint('Supabase logout successful.');
+      debugPrint(
+        'Current user: '
+        '${Supabase.instance.client.auth.currentUser}',
+      );
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Something went wrong while logging out.'),
-          ),
-        );
-      }
+      if (!mounted) return;
+
+      debugPrint('Navigating to /signin...');
+
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil('/signin', (route) => false);
+    } on AuthException catch (error, stackTrace) {
+      debugPrint('Supabase AuthException: ${error.message}');
+      debugPrint('$stackTrace');
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Logout failed: ${error.message}')),
+      );
+    } catch (error, stackTrace) {
+      debugPrint('Logout error: $error');
+      debugPrint('Stack trace: $stackTrace');
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Logout failed: $error'),
+          duration: const Duration(seconds: 6),
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final profile = ProfileModel(
-      name: 'Fuad',
-      email: 'fuad@email.com',
-      imageUrl: null,
-    );
+    final user = Supabase.instance.client.auth.currentUser;
+
+    final metadata = user?.userMetadata;
+
+    final name =
+        (metadata?['name'] ??
+                metadata?['full_name'] ??
+                metadata?['display_name'] ??
+                '')
+            .toString();
+
+    final email = user?.email ?? '';
+
+    final profile = ProfileModel(name: name, email: email, imageUrl: null);
 
     final accountItems = [
       ProfileMenuModel(

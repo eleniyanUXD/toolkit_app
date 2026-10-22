@@ -4,6 +4,7 @@ import 'package:toolkit_app/models/sign_in_model.dart';
 import 'package:toolkit_app/navigation/main_navigation.dart';
 import 'package:toolkit_app/widgets/custom_nav_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:async';
 
 class SignInForm extends StatefulWidget {
   final VoidCallback onSignup;
@@ -29,11 +30,34 @@ class _SignInFormState extends State<SignInForm> {
   bool _hidePassword = true;
   bool _isLoading = false;
   bool _rememberMe = false;
+  StreamSubscription<AuthState>? _authSubscription;
+  bool _googleSignInStarted = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _authSubscription = Supabase.instance.client.auth.onAuthStateChange.listen((
+      authState,
+    ) {
+      if (authState.event == AuthChangeEvent.signedIn &&
+          _googleSignInStarted &&
+          mounted) {
+        _googleSignInStarted = false;
+
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const MainNavigation()),
+          (route) => false,
+        );
+      }
+    });
+  }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _authSubscription?.cancel();
     super.dispose();
   }
 
@@ -71,6 +95,44 @@ class _SignInFormState extends State<SignInForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Unable to sign in. Please try again.')),
       );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _signInWithGoogle() async {
+    if (_isLoading) return;
+
+    setState(() {
+      _isLoading = true;
+      _googleSignInStarted = true;
+    });
+
+    try {
+      await Supabase.instance.client.auth.signInWithOAuth(
+        OAuthProvider.google,
+        redirectTo: 'io.supabase.flutter://callback',
+      );
+    } on AuthException catch (error) {
+      _googleSignInStarted = false;
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error.message)));
+    } catch (error) {
+      _googleSignInStarted = false;
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Google sign-in failed: $error')));
     } finally {
       if (mounted) {
         setState(() {
@@ -152,7 +214,20 @@ class _SignInFormState extends State<SignInForm> {
 
           TextFormField(
             controller: _passwordController,
-            decoration: _inputDecoration(hint: 'Password'),
+            decoration: _inputDecoration(
+              hint: 'Password',
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _hidePassword ? Icons.visibility_off : Icons.visibility,
+                  color: Colors.grey,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _hidePassword = !_hidePassword;
+                  });
+                },
+              ),
+            ),
             obscureText: _hidePassword,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -272,7 +347,7 @@ class _SignInFormState extends State<SignInForm> {
 
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: null,
+                  onPressed: _isLoading ? null : _signInWithGoogle,
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: Colors.blue, width: 1),
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
